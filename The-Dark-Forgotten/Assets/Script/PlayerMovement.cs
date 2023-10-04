@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
     public CharacterController controller;
 
     public float speed = 12f;
+    public float running = 24f;
     public float gravity = -9.82f;
 
     public Transform groundCheck;
@@ -31,10 +32,14 @@ public class PlayerMovement : MonoBehaviour
         float z = Input.GetAxis("Vertical");
 
         Vector3 move = transform.right*x+transform.forward*z;
-
         controller.Move(move*speed*Time.deltaTime);
 
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity*Time.deltaTime);
+
+        if (Input.GetKey("left shift"))
+        {
+            controller.Move(move * running * Time.deltaTime);
+        }
     }
 }
