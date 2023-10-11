@@ -17,7 +17,8 @@ public class PlayerMovement : MonoBehaviour
     Vector3 velocity;
     bool isGrounded;
 
-   
+    public static int keyCount;
+
     // Update is called once per frame
     void Update()
     {
@@ -40,6 +41,10 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKey("left shift"))
         {
             controller.Move(move * running * Time.deltaTime);
+        }
+        if (keyCount == 2)
+        {
+            running = 1f;
         }
     }
 }
