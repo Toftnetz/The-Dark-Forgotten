@@ -42,9 +42,6 @@ public class PlayerMovement : MonoBehaviour
         {
             controller.Move(move * running * Time.deltaTime);
         }
-        if (keyCount == 2)
-        {
-            running = 1f;
-        }
+        
     }
 }

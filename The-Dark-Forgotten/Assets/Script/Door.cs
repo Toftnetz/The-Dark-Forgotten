@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pickup : MonoBehaviour
+public class Door : MonoBehaviour
 {
-    public GameObject PickUpText;
-    
+    public GameObject OpenDoorText;
+
+    // Start is called before the first frame update
     void Start()
     {
-        PickUpText.SetActive(false);
+        OpenDoorText.SetActive(false);
     }
 
     // Update is called once per frame
@@ -16,19 +17,16 @@ public class Pickup : MonoBehaviour
     {
         if(collider.gameObject.tag == "Player")
         {
-            PickUpText.SetActive(true);
-
-            if (Input.GetKey(KeyCode.E))
+            OpenDoorText.SetActive(true);
+            if (Input.GetKey(KeyCode.E)&& PlayerMovement.keyCount==2)
             {
-                PlayerMovement.keyCount += 1;
                 Destroy(gameObject);
-                PickUpText.SetActive(false);
+                OpenDoorText.SetActive(false);
             }
         }
-        
     }
     private void OnTriggerExit(Collider collider)
     {
-        PickUpText.SetActive(false);
+        OpenDoorText.SetActive(false);
     }
 }
