@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: baum hd pine fbx 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 7163db7426b13a345b09fa28a500a5e6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 7163db7426b13a345b09fa28a500a5e6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 173.95207

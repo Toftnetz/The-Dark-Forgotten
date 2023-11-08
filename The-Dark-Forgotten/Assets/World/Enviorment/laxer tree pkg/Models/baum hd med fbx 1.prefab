@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: baum hd med fbx 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 8606c21208a6abf4aa86e39e9938598b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 8606c21208a6abf4aa86e39e9938598b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 167.30873
