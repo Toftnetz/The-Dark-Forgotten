@@ -20,7 +20,7 @@ public class Gate : MonoBehaviour
         if (collider.gameObject.tag == "Player")
         {
             OpenGateText.SetActive(true);
-            if (Input.GetKey(KeyCode.E) && PlayerMovement.keyCount == 2)
+            if (Input.GetKey(KeyCode.E) && PlayerMovement.keyCount == 3)
             {
                 gate.Play("GateOpen", 0, 0.0f);
                 OpenGateText.SetActive(false);

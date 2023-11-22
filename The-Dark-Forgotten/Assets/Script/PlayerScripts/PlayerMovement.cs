@@ -18,6 +18,8 @@ public class PlayerMovement : MonoBehaviour
     bool isGrounded;
 
     public static int keyCount;
+    public static int GasCan;
+    public static int Electricity;
 
     // Update is called once per frame
     void Update()
