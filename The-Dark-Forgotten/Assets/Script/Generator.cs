@@ -5,6 +5,7 @@ using UnityEngine;
 public class Generator : MonoBehaviour
 {
     public GameObject OpenDoorText;
+    public static bool Lights = false;
 
     // Start is called before the first frame update
     void Start()
@@ -18,9 +19,11 @@ public class Generator : MonoBehaviour
         if(collider.gameObject.tag == "Player"&& PlayerMovement.Electricity != 1)
         {
             OpenDoorText.SetActive(true);
-            if (Input.GetKey(KeyCode.E) && PlayerMovement.GasCan==1)
+            if (Input.GetKey(KeyCode.E) && PlayerMovement.Fuse==1)
             {
+                
                 PlayerMovement.Electricity = 1;
+                Lights = true;
                 OpenDoorText.SetActive(false);
                 
             }

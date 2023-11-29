@@ -21,7 +21,7 @@ public class DoorLab : MonoBehaviour
         if (collider.gameObject.tag == "Player")
         {
             OpenDoor1Text.SetActive(true);
-            if (Input.GetKey(KeyCode.E) && PlayerMovement.Electricity == 1 && DoorOpen!=true)
+            if (Input.GetKey(KeyCode.E) && PlayerMovement.keyCount == 1 && DoorOpen!=true)
             {
                 Door1.Play("Door1", 0, 0.0f);
                 DoorOpen = true;
