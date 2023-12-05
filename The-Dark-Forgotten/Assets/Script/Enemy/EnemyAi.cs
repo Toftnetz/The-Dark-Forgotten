@@ -1,98 +1,176 @@
 using System.Collections;
+
 using System.Collections.Generic;
+
 using UnityEngine;
+
 using UnityEngine.AI;
 
-public class EnemyAi : MonoBehaviour
+using UnityEngine.SceneManagement;
+
+
+
+public class EnemyAI : MonoBehaviour
+
 {
-    public UnityEngine.AI.NavMeshAgent agent;
+
+    public NavMeshAgent ai;
+
+    public List<Transform> destinations;
+
+    public Animator aiAnim;
+
+    public float walkSpeed, chaseSpeed, minIdleTime, maxIdleTime, idleTime, sightDistance, catchDistance, chaseTime, minChaseTime, maxChaseTime;
+
+    public bool walking, chasing;
 
     public Transform player;
 
-    public LayerMask whatIsGround, whatIsPlayer;
+    Transform currentDest;
 
-    public Vector3 walkPoint;
-    bool walkPointSet;
-    public float walkPointRange;
+    Vector3 dest;
 
-    public float timeBetweenAttacks;
-    bool alreadyAttacked;
+    int randNum;
 
-    public float sightRange, attackRange;
-    public bool playerInSightRange, playerInAttackRange;
+    public int destinationAmount;
 
-    private void Awake()
+    public float rayCastOffset;
+
+    public LayerMask layerMask;
+
+
+
+    void Start()
+
     {
-        player = GameObject.Find("FirstPersonPlayer").transform;
-        agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+
+        walking = true;
+
+        randNum = Random.Range(0, destinations.Count);
+
+        currentDest = destinations[randNum];
+
     }
 
-    private void Update()
+    void Update()
+
     {
-        playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
-        playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
 
-        if (!playerInSightRange && !playerInAttackRange) Patroling();
-        if (playerInSightRange && !playerInAttackRange) ChasePlayer();
-        if (playerInSightRange && playerInAttackRange) AttackPlayer();
-    }
+        Vector3 direction = (player.position - transform.position).normalized;
 
-    private void Patroling()
-    {
-        if (!walkPointSet) SearchWalkPoint();
-
-        if (walkPointSet)
-            agent.SetDestination(walkPoint);
-
-        Vector3 distanceToWalkPoint = transform.position - walkPoint;
-
-        if(distanceToWalkPoint.magnitude <1f)
-            walkPointSet = false;
-    }
-
-    private void SearchWalkPoint()
-    {
-        float randomZ = Random.Range(-walkPointRange, walkPointRange);
-        float randomX = Random.Range(-walkPointRange, walkPointRange);
-
-        walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ)*Time.deltaTime;
-
-        if (Physics.Raycast(walkPoint, -transform.up, 2f, whatIsGround))
-            walkPointSet = true;
-
-    }
-    private void ChasePlayer()
-    {
-        agent.SetDestination(player.position);
-    }
-
-    private void AttackPlayer()
-    {
-        agent.SetDestination(transform.position);
-
-        transform.LookAt(player);
-
-        if(!alreadyAttacked)
-        {
-            //Attack code
-
-            alreadyAttacked = true;
-            Invoke(nameof(ResetAttack), timeBetweenAttacks);
-        }
+        RaycastHit hit;
         
+        if (Physics.SphereCast(transform.position, rayCastOffset, direction, out hit, sightDistance, layerMask))
+
+        {
+
+            if (hit.collider.gameObject.tag == "Player")
+
+            {
+
+                walking = false;
+
+                StopCoroutine("stayIdle");
+
+                StopCoroutine("chaseRoutine");
+
+                StartCoroutine("chaseRoutine");
+
+                chasing = true;
+
+            }
+
+        }
+
+        if (chasing == true)
+
+        {
+
+            dest = player.position;
+
+            ai.destination = dest;
+
+            ai.speed = chaseSpeed;
+
+            aiAnim.SetBool("running", true);
+
+            float distance = Vector3.Distance(player.position, ai.transform.position);
+
+            if (distance <= catchDistance)
+
+            {
+
+                player.gameObject.SetActive(false);
+
+                chasing = false;
+
+            }
+
+        }
+
+        if (walking == true)
+
+        {
+
+            dest = currentDest.position;
+
+            ai.destination = dest;
+
+            ai.speed = walkSpeed;
+
+            aiAnim.SetBool("walking", true);
+
+            if (ai.remainingDistance <= ai.stoppingDistance)
+
+            {
+                aiAnim.SetBool("walking", false);
+
+                ai.speed = 0;
+
+                StopCoroutine("stayIdle");
+
+                StartCoroutine("stayIdle");
+
+                walking = false;
+
+            }
+
+        }
+
     }
 
-    private void ResetAttack()
+    IEnumerator stayIdle()
+
     {
-        alreadyAttacked = false;
+
+        idleTime = Random.Range(minIdleTime, maxIdleTime);
+
+        yield return new WaitForSeconds(idleTime);
+
+        walking = true;
+
+        randNum = Random.Range(0, destinations.Count);
+
+        currentDest = destinations[randNum];
+
     }
 
-    private void OnDrawGizmosSelected()
+    IEnumerator chaseRoutine()
+
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, sightRange);
 
-    }
+        chaseTime = Random.Range(minChaseTime, maxChaseTime);
+
+        yield return new WaitForSeconds(chaseTime);
+
+        walking = true;
+
+        chasing = false;
+
+        randNum = Random.Range(0, destinations.Count);
+
+        currentDest = destinations[randNum];
+
+    }  
+
 }

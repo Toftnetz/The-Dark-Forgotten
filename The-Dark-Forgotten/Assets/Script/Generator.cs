@@ -6,6 +6,7 @@ public class Generator : MonoBehaviour
 {
     public GameObject OpenDoorText;
     public static bool Lights = false;
+    public AudioSource GeneratorSound;
 
     // Start is called before the first frame update
     void Start()
@@ -24,6 +25,7 @@ public class Generator : MonoBehaviour
                 
                 PlayerMovement.Electricity = 1;
                 Lights = true;
+                GeneratorSound.enabled = true;
                 OpenDoorText.SetActive(false);
                 
             }
