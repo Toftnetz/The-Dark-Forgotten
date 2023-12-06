@@ -46,6 +46,7 @@ public class EnemyAI : MonoBehaviour
     void Start()
 
     {
+        Monster.enabled = false;    
 
         walking = true;
 
