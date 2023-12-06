@@ -38,6 +38,9 @@ public class EnemyAI : MonoBehaviour
 
     public LayerMask layerMask;
 
+    public AudioSource Monster;
+
+
 
 
     void Start()
@@ -67,16 +70,14 @@ public class EnemyAI : MonoBehaviour
             if (hit.collider.gameObject.tag == "Player")
 
             {
-
+                
                 walking = false;
 
                 StopCoroutine("stayIdle");
 
                 StopCoroutine("chaseRoutine");
 
-                StartCoroutine("chaseRoutine");
-
-                chasing = true;
+                StartCoroutine(Delay());
 
             }
 
@@ -172,5 +173,17 @@ public class EnemyAI : MonoBehaviour
         currentDest = destinations[randNum];
 
     }  
+
+    private IEnumerator Delay()
+    {
+        aiAnim.SetBool("Scare", true);
+        Monster.enabled = true;
+        yield return new WaitForSeconds(2);
+        aiAnim.SetBool("Scare", false);
+        Monster.enabled = false;
+        StartCoroutine("chaseRoutine");
+
+        chasing = true;
+    }
 
 }
